@@ -1,5 +1,7 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate,logout
+from django.contrib.auth import authenticate,logout,login
+from django.contrib.auth import get_user_model
+User = get_user_model()
 
 # Create your views here.
 
@@ -25,10 +27,26 @@ def checkout(request):
 
 
 def singup(request):
+    if request.method=="POST":
+        name=request.POST.get('name')
+        email=request.POST.get('email')
+        password=request.POST.get('password')
+        cpassword=request.POST.get('cpassword')
+        user=User.objects.create(name=name,email=email)
+        user.set_password(password)
+        user.save()
+        return redirect('singin')
     return render(request,'singup.html')
     
 
 def singin(request):
+    if request.method=="POST":
+        email=request.POST.get('email')
+        password=request.POST.get('password')
+        user=authenticate(request,email=email,password=password)
+        if user is not None:
+            login(request,user)
+            return redirect('dashboard')
     return render(request,'singin.html')
 
 
