@@ -1,6 +1,11 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate,logout,login
+from django.http import HttpResponse, HttpResponseRedirect
+from django.core.paginator import Paginator
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import authenticate,login,logout as user_logout
 from django.contrib.auth import get_user_model
+from .seed import * 
+from .models import *
 User = get_user_model()
 
 # Create your views here.
@@ -15,7 +20,13 @@ def aboutus(request):
     return render(request,'aboutus.html') 
 
 def shop(request):
-    return render(request,'shop.html')
+    product_list=Product.objects.all()
+    paginator = Paginator(product_list, 12)  # Show 25 contacts per page.
+
+    page_number = request.GET.get("page")
+    product= paginator.get_page(page_number)
+    return render(request,'shop.html',{"products":product})
+
 
 
 def contectus(request):
@@ -50,11 +61,21 @@ def singin(request):
     return render(request,'singin.html')
 
 
-def user_logout(request):
-    logout(request)
-    return redirect('/')
 
-
+def logout(request):
+    user_logout(request)
+    return redirect('singin')
+@login_required(login_url="singin")
 def dashboard(request):
     return render(request,'dashboard.html')
-    
+
+def product_detail(request, slug):
+    product = Product.objects.get(slug=slug)
+    all_products = Product.objects.all()
+    popular_products = random.sample(list(all_products), 4)
+    related_products=Product.objects.filter(category=product.category)
+    return render(request,'detail.html',{'product':product,'popular_products':popular_products,'related_products':related_products})
+
+def seed_data(n=22):
+    product_seed()
+    return HttpResponse('product Done!')

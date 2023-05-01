@@ -17,6 +17,8 @@
 	<link rel="stylesheet" type="text/css" href="{% static 'assets/css/chosen.min.css' %}">
 	<link rel="stylesheet" type="text/css" href="{% static 'assets/css/style.css' %}">
 	<link rel="stylesheet" type="text/css" href="{% static 'assets/css/color-01.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'assets/css/flexslider.css' %}">
+	
     {% block style %}
     {% endblock %}
 </head>
@@ -71,7 +73,9 @@
 								</li>
 								{% if request.user.is_authenticated %}
 								<li class="menu-item menu-item-has-children parent" >
-									<a title="My account" href="#">My account {{request.user.username}}<i class="fa fa-angle-down" aria-hidden="true"></i></a>
+
+									<a title="My account" href="#">My account {{request.user.name}}<i class="fa fa-angle-down" aria-hidden="true"></i></a>
+								
 									<ul class="submenu curency" >
 										<li class="menu-item" >
 											<a title="Dashboard" href="#">Dashboard</a>

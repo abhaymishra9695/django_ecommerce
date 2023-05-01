@@ -29,4 +29,6 @@ urlpatterns = [
     path('singin/',views.singin,name='singin'),
     path('dashboard/',views.dashboard,name='dashboard'),
     path('logout/',views.logout,name='logout'),
+    path('seed/',views.seed_data,name='seed'),
+    path('product_detail/<slug:slug>',views.product_detail,name='product_detail'),
 ]
