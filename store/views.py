@@ -15,10 +15,11 @@ def home(request):
 
 
 def cart(request):   # sourcery skip: remove-unreachable-code
-    cart=Cart.objects.filter(is_paid=False,user=request.user)
-    
-    return HttpResponse(cart)
-    return render(request,'cart.html',{"cart":cart})
+    cart=Cart.objects.filter(is_paid=False,user=request.user).first()
+    cart_items = cart.cart_items.all()
+  
+    # return HttpResponse(total_price)
+    return render(request,'cart.html',{"cart":cart,"cart_items":cart_items})
 def aboutus(request):
     return render(request,'aboutus.html') 
 

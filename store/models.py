@@ -64,9 +64,9 @@ class Cart(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE,related_name="carts")
     is_paid = models.BooleanField(default=False)
 
-    def get_cart_total(self):  # sourcery skip: for-append-to-extend, list-comprehension
-        cart_items=cart_items.all()
+    def get_cart_total(self): 
         price=[]
+        cart_items=self.cart_items.all()
         for cart_item in cart_items:
             price.append(cart_item.product.regular_price)
         return sum(price)
