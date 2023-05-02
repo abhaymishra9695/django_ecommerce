@@ -14,8 +14,11 @@ def home(request):
     return render(request,'home.html')
 
 
-def cart(request):
-    return render(request,'cart.html')
+def cart(request):   # sourcery skip: remove-unreachable-code
+    cart=Cart.objects.filter(is_paid=False,user=request.user)
+    
+    return HttpResponse(cart)
+    return render(request,'cart.html',{"cart":cart})
 def aboutus(request):
     return render(request,'aboutus.html') 
 
@@ -76,6 +79,18 @@ def product_detail(request, slug):
     related_products=Product.objects.filter(category=product.category)
     return render(request,'detail.html',{'product':product,'popular_products':popular_products,'related_products':related_products})
 
-def seed_data(n=22):
-    product_seed()
-    return HttpResponse('product Done!')
+
+def add_cart_product(request,slug):
+    product=Product.objects.get(slug=slug)
+    user=request.user
+    cart,_=Cart.objects.get_or_create(user=user,is_paid=False)
+    cartitem=CartItem.objects.create(cart=cart,product=product) 
+    cartitem.save()
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+
+
+def seed_data(request):
+
+    # product_seed()
+    return HttpResponse(request.get_cart_count())

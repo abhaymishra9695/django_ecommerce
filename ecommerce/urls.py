@@ -31,4 +31,5 @@ urlpatterns = [
     path('logout/',views.logout,name='logout'),
     path('seed/',views.seed_data,name='seed'),
     path('product_detail/<slug:slug>',views.product_detail,name='product_detail'),
+    path('add_cart_product/<slug:slug>',views.add_cart_product,name='add_cart_product'),
 ]

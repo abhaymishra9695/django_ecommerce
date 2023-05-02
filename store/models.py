@@ -20,10 +20,13 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     objects = CustomUserManager()
 
+    def get_cart_count(self):
+        return CartItem.objects.filter(cart__is_paid=False, cart__user=self).count()
+
     def __str__(self):
         return self.email   
     
-
+   
 
 class Category(models.Model):
     name = models.CharField(max_length = 30,unique=True)
@@ -57,7 +60,28 @@ class Product(models.Model):
         return self.name         
         
         
-        
+class Cart(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE,related_name="carts")
+    is_paid = models.BooleanField(default=False)
+
+    def get_cart_total(self):  # sourcery skip: for-append-to-extend, list-comprehension
+        cart_items=cart_items.all()
+        price=[]
+        for cart_item in cart_items:
+            price.append(cart_item.product.regular_price)
+        return sum(price)
+    
+
+class CartItem(models.Model):
+    cart = models.ForeignKey(Cart, on_delete=models.CASCADE,related_name="cart_items")
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True, blank=True)
+
+    def get_product_price(self):
+        return self.product.regular_price
+  
+    
+    
+      
         
         
         

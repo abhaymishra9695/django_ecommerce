@@ -14,3 +14,7 @@ admin.site.register(Category,AdminCatogary)
 class AdminProduct(admin.ModelAdmin):
     list_display=['name']
 admin.site.register(Product,AdminProduct)
+
+
+admin.site.register(Cart)
+admin.site.register(CartItem)
