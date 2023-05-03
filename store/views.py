@@ -89,9 +89,38 @@ def add_cart_product(request,slug):
     cartitem.save()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
-
-
+def remove_cart_product(request,cart_item_id): 
+    # return HttpResponse(cart_item_id)
+    try:
+        cartitem=CartItem.objects.filter(id=cart_item_id) 
+        cartitem.delete()
+    except Exception as e:
+        print(e)
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER')) 
 def seed_data(request):
 
     # product_seed()
     return HttpResponse(request.get_cart_count())
+
+
+from django.http import JsonResponse
+
+def increment_cart(request,cart_item_id):  # sourcery skip: last-if-guard, remove-unreachable-code
+       
+        cart_item = CartItem.objects.get(id=cart_item_id)
+        cart_item.quantity = cart_item.quantity+1
+        cart_item.save()
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))     
+
+def decrement_cart(request,cart_item_id):  # sourcery skip: last-if-guard, remove-unreachable-code
+        
+        cart_item = CartItem.objects.get(id=cart_item_id)
+        if cart_item.quantity>1:
+            cart_item.quantity = cart_item.quantity-1
+            cart_item.save()
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER'))     
+
+        else:
+            cart_item.delete()
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER'))     
+        

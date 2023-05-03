@@ -68,18 +68,18 @@ class Cart(models.Model):
         price=[]
         cart_items=self.cart_items.all()
         for cart_item in cart_items:
-            price.append(cart_item.product.regular_price)
+            price.append(cart_item.product.regular_price*cart_item.quantity)
         return sum(price)
     
 
 class CartItem(models.Model):
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE,related_name="cart_items")
     product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True, blank=True)
-
+    quantity = models.PositiveIntegerField(default=1)
     def get_product_price(self):
-        return self.product.regular_price
-  
+        return self.product.regular_price*self.quantity
     
+
     
       
         
