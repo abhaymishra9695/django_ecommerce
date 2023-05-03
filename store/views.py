@@ -103,7 +103,7 @@ def seed_data(request):
     return HttpResponse(request.get_cart_count())
 
 
-from django.http import JsonResponse
+
 
 def increment_cart(request,cart_item_id):  # sourcery skip: last-if-guard, remove-unreachable-code
        
@@ -123,4 +123,9 @@ def decrement_cart(request,cart_item_id):  # sourcery skip: last-if-guard, remov
         else:
             cart_item.delete()
             return HttpResponseRedirect(request.META.get('HTTP_REFERER'))     
-        
+
+
+def delete_cart(request):
+    cart_item = CartItem.objects.all()
+    cart_item.delete()    
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER')) 

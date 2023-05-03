@@ -2,6 +2,7 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
+from django.http import HttpResponse, HttpResponseRedirect
 
 from .managers import CustomUserManager
 
@@ -68,16 +69,18 @@ class Cart(models.Model):
         price=[]
         cart_items=self.cart_items.all()
         for cart_item in cart_items:
-            price.append(cart_item.product.regular_price*cart_item.quantity)
+            product_price=cart_item.product.regular_price*cart_item.quantity
+            price.append(product_price)
         return sum(price)
-    
 
+   
 class CartItem(models.Model):
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE,related_name="cart_items")
     product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True, blank=True)
     quantity = models.PositiveIntegerField(default=1)
     def get_product_price(self):
-        return self.product.regular_price*self.quantity
+        product_price=self.product.regular_price*self.quantity
+        return product_price
     
 
     
