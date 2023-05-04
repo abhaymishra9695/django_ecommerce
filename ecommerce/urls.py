@@ -36,6 +36,12 @@ urlpatterns = [
     path('increment_cart/<cart_item_id>',views.increment_cart,name='increment_cart'),
     path('decrement_cart/<cart_item_id>',views.decrement_cart,name='decrement_cart'),
     path('delete_cart',views.delete_cart,name='delete_cart'),
-
-
+    path('catagory_by_product/<slug:slug>',views.catagory_by_product,name='catagory_by_product'),
+    path('search/',views.search,name='search'),
+    path('Categories',views.Categories,name='Categories'),
+    path('addcategories',views.addcategories,name='addcategories'),
+    path('update_category/<slug:slug>',views.update_category,name='update_category'),
+    path('delete_category/<slug:slug>',views.delete_category,name='delete_category'),
+    path('product',views.product,name='product'),
+    path('add_product',views.add_product,name='add_product'),
 ]

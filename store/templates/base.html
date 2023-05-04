@@ -81,6 +81,22 @@
 											<a title="Dashboard" href="{% url 'dashboard' %}">Dashboard</a>
 										</li>
 										<li class="menu-item" >
+											<a title="All Product" href="{% url 'product' %}">All Product</a>
+										</li>
+										<li class="menu-item" >
+											<a title="Dashboard" href="{% url 'Categories' %}">Categories</a>
+										</li>
+										<li class="menu-item" >
+											<a title="Dashboard" href="{% url 'dashboard' %}">Coupons</a>
+										</li>
+										<li class="menu-item" >
+											<a title="Dashboard" href="{% url 'dashboard' %}">Orders</a>
+										</li>
+										<li class="menu-item" >
+											<a title="Dashboard" href="{% url 'dashboard' %}">Customers</a>
+										</li>
+										
+										<li class="menu-item" >
 											<a title="Logout" href="{% url 'logout' %}">Logout</a>
 										</li>
 										
@@ -104,30 +120,17 @@
 
 						<div class="wrap-search center-section">
 							<div class="wrap-search-form">
-								<form action="#" id="form-search-top" name="form-search-top">
+								<form action="{% url 'search' %}" id="form-search-top" name="form-search-top" method="get">
 									<input type="text" name="search" value="" placeholder="Search here...">
-									<button form="form-search-top" type="button"><i class="fa fa-search" aria-hidden="true"></i></button>
+									<button form="form-search-top" type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
 									<div class="wrap-list-cate">
-										<input type="hidden" name="product-cate" value="0" id="product-cate">
+										<!-- <input type="hidden" name="product-cate" value="0" id="product-cate"> -->
 										<a href="#" class="link-control">All Category</a>
 										<ul class="list-cate">
 											<li class="level-0">All Category</li>
-											<li class="level-1">-Electronics</li>
-											<li class="level-2">Batteries & Chargens</li>
-											<li class="level-2">Headphone & Headsets</li>
-											<li class="level-2">Mp3 Player & Acessories</li>
-											<li class="level-1">-Smartphone & Table</li>
-											<li class="level-2">Batteries & Chargens</li>
-											<li class="level-2">Mp3 Player & Headphones</li>
-											<li class="level-2">Table & Accessories</li>
-											<li class="level-1">-Electronics</li>
-											<li class="level-2">Batteries & Chargens</li>
-											<li class="level-2">Headphone & Headsets</li>
-											<li class="level-2">Mp3 Player & Acessories</li>
-											<li class="level-1">-Smartphone & Table</li>
-											<li class="level-2">Batteries & Chargens</li>
-											<li class="level-2">Mp3 Player & Headphones</li>
-											<li class="level-2">Table & Accessories</li>
+											{% for catagery in  catageries %}
+											<li class="level-1"><a href="{% url 'catagory_by_product' catagery.slug  %}"  class="cate-link">{{ catagery.name }}</a></li>
+											{% endfor %}
 										</ul>
 									</div>
 								</form>

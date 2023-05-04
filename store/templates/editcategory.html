@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block title %}
+Categories for Admin
+{% endblock %}
+{% block content %}
+<div>
+    <div class="container" style="padding: 30px 0;">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading" >
+                    <div class="row">
+
+                        <div class="col-md-6">
+                            update Categories
+                        </div>
+                        <div class="col-md-6">
+                           <a href="{% url 'Categories' %}" class="btn btn-success pull-right">All Categories</a> 
+                        </div>
+                    </div>
+
+             
+                </div>
+                <div class="panel-body">
+                    <form action="" class="form-horizontal" method="post">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="" class="col-md-4 control-label"> Category Name</label>
+                            <div class="col-md-4">
+                                <input type="text" placeholder="Catagory Name" class="form-control input-md" name="catagery" value="{{ catagery.name }}">
+                                
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="" class="col-md-4 control-label"></label>
+                            <div class="col-md-4">
+                                <button type="submit" class="btn btn-primary">Submit</button>                                
+                            </div>
+                        </div>
+                    </form>
+                   
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+</div>
+{% endblock content %}

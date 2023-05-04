@@ -6,8 +6,8 @@ from decimal import Decimal
 import random
 from .models import *
 from django.utils.text import slugify
-
-def product_seed(n=22):
+from datetime import datetime, timedelta
+def product_seed(n=100):
     try:
         for _ in range(n):
             category_objs=Category.objects.all()
@@ -23,7 +23,10 @@ def product_seed(n=22):
             quantity=random.randint(100, 200)
             imagesname=f'digital_0{random.randint(1,22)}.jpg'
             category=category_objs[rendom_index]
-
+            start_date = datetime.now() - timedelta(days=365)
+            end_date = datetime.now()
+            date_joined = fake.date_between(start_date=start_date, end_date=end_date)
+           
             Product.objects.create(
                     name=product_name,
                     slug=product_slug,
@@ -34,7 +37,8 @@ def product_seed(n=22):
                     stock_status=stock_status,
                     quantity = quantity,
                     imagesname=imagesname,
-                    category=category
+                    category=category,
+                    date_joined=date_joined
             )
     except Exception as e:
         print(e)
