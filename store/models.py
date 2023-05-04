@@ -53,7 +53,7 @@ class Product(models.Model):
     stock_status = models.CharField(max_length = 150,choices=stock_status)
     feature = models.BooleanField(default=False)
     quantity = models.IntegerField(default=10)
-    imagesname = models.CharField(max_length = 150,null=True)
+    imagesname = models.ImageField(upload_to='static/assets/images/products')
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     date_joined = models.DateTimeField(default=timezone.now)
 
