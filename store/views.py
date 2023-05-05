@@ -243,9 +243,35 @@ def product(request):
     return render(request,'product.html',{"products":product})
 
 def add_product(request):
+    catageries=Category.objects.all()
     if request.method=="POST":
-        catagery=  request.POST.get('catagery')
-        slug= slugify(catagery)
-        catagery=Category.objects.create(name=catagery,slug=slug) 
-        catagery.save()
-    return render(request,'add_product.html')
+        # ----------
+        product_name=  request.POST.get('name')
+        product_slug=  slugify(product_name)
+        sort_description=  request.POST.get('sort_description')
+        description=  request.POST.get('description')
+        regular_price=  request.POST.get('regular_price')
+        sale_price=request.POST.get('sale_price')
+        SKU=  request.POST.get('SKU')
+        stock_status=  request.POST.get('stock_status')
+        quantity=  request.POST.get('quantity')
+        imagesname=  request.FILES.get('imagesname')
+        category=  request.POST.get('category')
+        category = Category.objects.get(name=category)
+        # return HttpResponse(imagesname)
+        product_list=Product.objects.create(
+            name=product_name,
+            slug=product_slug,
+            sort_description=sort_description,
+            description=description,
+            regular_price=regular_price,
+            sale_price=sale_price,
+            SKU=SKU,
+            stock_status=stock_status,
+            quantity=quantity,
+            category=category,
+            imagesname=imagesname,
+        )
+        product_list.save()
+
+    return render(request,'add_product.html',{"catageries":catageries})

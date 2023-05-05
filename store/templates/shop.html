@@ -77,7 +77,7 @@ shop
 								<div class="product product-style-3 equal-elem ">
 									<div class="product-thumnail">
 										<a href="{% url 'product_detail' product.slug %}" title="{{ product.name }}">
-											<img src="{% static 'assets/images/products/' %}{{ product.imagesname }}" alt="{{ product.name }}">
+											<img src="/media/{{ product.imagesname }}" alt="{{ product.name }}">
 										</a>
 									</div>
 									<div class="product-info">

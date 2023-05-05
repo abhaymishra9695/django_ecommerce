@@ -40,8 +40,8 @@ class Category(models.Model):
 
 class Product(models.Model):
     stock_status=    [
-    ("IN", "instock"),
-    ("out", "outofstock"),
+    ("instock", "instock"),
+    ("instock", "instock"),
     ]
     name=models.CharField(max_length=100)
     slug= models.SlugField(max_length = 150, unique=True)
@@ -53,7 +53,7 @@ class Product(models.Model):
     stock_status = models.CharField(max_length = 150,choices=stock_status)
     feature = models.BooleanField(default=False)
     quantity = models.IntegerField(default=10)
-    imagesname = models.ImageField(upload_to='static/assets/images/products')
+    imagesname = models.ImageField(upload_to='images/products')
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     date_joined = models.DateTimeField(default=timezone.now)
 

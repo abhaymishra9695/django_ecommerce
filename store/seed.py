@@ -7,7 +7,7 @@ import random
 from .models import *
 from django.utils.text import slugify
 from datetime import datetime, timedelta
-def product_seed(n=100):
+def product_seed(n=22):
     try:
         for _ in range(n):
             category_objs=Category.objects.all()
@@ -44,3 +44,24 @@ def product_seed(n=100):
         print(e)
 
 
+
+import os
+import shutil
+
+def save_image_to_media(image_path):
+    # Get the filename of the image
+    filename = os.path.basename(image_path)
+
+    # Define the paths to the static and media directories
+    static_path = "/path/to/static//"
+    media_path = "/path/to/media/directory/"
+
+    # Define the paths to the source and destination files
+    source_file = os.path.join(static_path, filename)
+    dest_file = os.path.join(media_path, filename)
+
+    # Copy the file from the static directory to the media directory
+    shutil.copy2(source_file, dest_file)
+
+    # Return the path to the saved image
+    return os.path.join("media", filename)

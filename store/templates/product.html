@@ -43,7 +43,7 @@ All Product
                             {% for product in products %}
                             <tr>
                                 <td>{{ product.id }}</td>
-                                <td><img src="{% static 'assets/images/products/' %}{{ product.imagesname }}" alt="{{ product.name }}" style="height: 60px;"></td>
+                                <td><img src="/media/images/products{{ product.imagesname }}" alt="{{ product.name }}" style="height: 60px;"></td>
                                 <td>{{ product.name }}</td>
                                 <td>{{ product.stock_status }}</td>
                                 <td>{{ product.regular_price }}</td>

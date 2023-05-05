@@ -22,48 +22,48 @@ Categories for Admin
              
                 </div>
                 <div class="panel-body">
-                    <form action="" class="form-horizontal" method="post">
+                    <form action="" class="form-horizontal" method="post" enctype="multipart/form-data">
                         {% csrf_token %}
                         <div class="form-group">
                             <label for="" class="col-md-4 control-label"> Product Name</label>
                             <div class="col-md-4">
-                                <input type="text" placeholder="Catagory Name" class="form-control input-md" name="name">
+                                <input type="text" placeholder="Product Name" class="form-control input-md" name="name">
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="" class="col-md-4 control-label"> Product sort_description</label>
                             <div class="col-md-4">
-                                <input type="text" placeholder="Catagory Name" class="form-control input-md" name="sort_description">
+                                <input type="text" placeholder="Product sort_description" class="form-control input-md" name="sort_description">
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="" class="col-md-4 control-label"> Product description</label>
                             <div class="col-md-4">
-                                <input type="text" placeholder="Catagory Name" class="form-control input-md" name="description">
+                                <input type="text" placeholder="Product description" class="form-control input-md" name="description">
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="" class="col-md-4 control-label"> Product regular_price</label>
                             <div class="col-md-4">
-                                <input type="text" placeholder="Catagory Name" class="form-control input-md" name="regular_price">
+                                <input type="text" placeholder="Product regular_price" class="form-control input-md" name="regular_price">
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="" class="col-md-4 control-label"> Product sale_price</label>
                             <div class="col-md-4">
-                                <input type="text" placeholder="Catagory Name" class="form-control input-md" name="catagery">
+                                <input type="text" placeholder="Product sale_price" class="form-control input-md" name="sale_price">
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="" class="col-md-4 control-label"> Product SKU</label>
                             <div class="col-md-4">
-                                <input type="text" placeholder="Catagory Name" class="form-control input-md" name="catagery">
+                                <input type="text" placeholder="Product SKU" class="form-control input-md" name="SKU">
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="" class="col-md-4 control-label"> Product stock_status</label>
                             <div class="col-md-4">
-                                <select class="form-select" aria-label="Default select example">
+                                <select class="form-select-md" aria-label="Default select example" name="stock_status" >
                                     <option value="instock" selected>instock</option>
                                     <option value="outofstock">outofstock</option>
                                   </select>
@@ -71,27 +71,26 @@ Categories for Admin
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="" class="col-md-4 control-label"> Product feature</label>
-                            <div class="col-md-4">
-                                <input type="text" placeholder="Catagory Name" class="form-control input-md" name="catagery">
-                            </div>
-                        </div>
-                        <div class="form-group">
                             <label for="" class="col-md-4 control-label"> Product quantity</label>
                             <div class="col-md-4">
-                                <input type="text" placeholder="Catagory Name" class="form-control input-md" name="catagery">
+                                <input type="text" placeholder="Product quantity" class="form-control input-md" name="quantity">
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="" class="col-md-4 control-label"> Product imagesname</label>
                             <div class="col-md-4">
-                                <input type="file" placeholder="Catagory Name" class="form-control input-md" name="catagery">
+                                <input type="file" placeholder="Product imagesname" class="form-control input-md" name="imagesname">
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="" class="col-md-4 control-label"> Product category  </label>
                             <div class="col-md-4">
-                                <input type="text" placeholder="Catagory Name" class="form-control input-md" name="catagery">
+                                <select class="form-select form-select-md"  name="category">
+                                    {% for catagery in catageries %}
+                                    <option value="{{ catagery.name }}">{{ catagery.name }}</option>
+                                    {% endfor %}
+                                </select>
+                                <!-- <input type="text" placeholder="Catagory Name" class="form-control input-md" name="catagery"> -->
                             </div>
                         </div>
                         <div class="form-group">
@@ -107,18 +106,6 @@ Categories for Admin
         </div>
     </div>
     </div>
- 
-
-
-
-
-
-SKU
-stock_status
-quantity
-imagesname
-category
-date_joined
 
 </div>
 {% endblock content %}
