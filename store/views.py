@@ -129,7 +129,6 @@ def remove_cart_product(request,cart_item_id):
         print(e)
     return HttpResponseRedirect(request.META.get('HTTP_REFERER')) 
 def seed_data(request):
-
     product_seed()
     return HttpResponse("done")
 
@@ -275,3 +274,41 @@ def add_product(request):
         product_list.save()
 
     return render(request,'add_product.html',{"catageries":catageries})
+
+def update_product(request,slug):
+    catageries=Category.objects.all()
+    product=Product.objects.get(slug=slug)
+    if request.method=="POST":
+        product_name=  request.POST.get('name')
+        product_slug=  slugify(product_name)
+        sort_description=  request.POST.get('sort_description')
+        description=  request.POST.get('description')
+        regular_price=  request.POST.get('regular_price')
+        sale_price=request.POST.get('sale_price')
+        SKU=  request.POST.get('SKU')
+        stock_status=  request.POST.get('stock_status')
+        quantity=  request.POST.get('quantity')
+        imagesname=  request.FILES.get('imagesname')
+        category=  request.POST.get('category')
+        productcategory = Category.objects.get(name=category)
+        # return HttpResponse(category.name)
+        product.name=product_name
+        product.slug=product_slug
+        product.sort_description=sort_description
+        product.description=description
+        product.regular_price=regular_price
+        product.sale_price=sale_price
+        product.SKU=SKU
+        product.stock_status=stock_status
+        product.quantity=quantity
+        product.imagesname=imagesname
+        product.category=productcategory
+        product.save()
+        return redirect('product')
+    return render(request,'updateproduct.html',{"catageries":catageries, "product":product})
+
+
+def delete_product(request,slug):
+    product=Product.objects.get(slug=slug)
+    product.delete()
+    return redirect('product')

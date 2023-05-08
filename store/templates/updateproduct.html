@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+{% block title %}
+Categories for Admin
+{% endblock %}
+{% block content %}
+<div>
+    <div class="container" style="padding: 30px 0;">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading" >
+                    <div class="row">
+
+                        <div class="col-md-6">
+                            Add Products
+                        </div>
+                        <div class="col-md-6">
+                           <a href="{% url 'product' %}" class="btn btn-success pull-right">All Products</a> 
+                        </div>
+                    </div>
+
+             
+                </div>
+                <div class="panel-body">
+                    <form action="" class="form-horizontal" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="" class="col-md-4 control-label"> Product Name</label>
+                            <div class="col-md-4">
+                                <input type="text" placeholder="Product Name" class="form-control input-md" name="name" value="{{product.name}}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="" class="col-md-4 control-label"> Product sort_description</label>
+                            <div class="col-md-4">
+                                <input type="text" placeholder="Product sort_description" class="form-control input-md" name="sort_description" value="{{product.sort_description}}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="" class="col-md-4 control-label"> Product description</label>
+                            <div class="col-md-4">
+                                <input type="text" placeholder="Product description" class="form-control input-md" name="description" value="{{product.description}}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="" class="col-md-4 control-label"> Product regular_price</label>
+                            <div class="col-md-4">
+                                <input type="number" placeholder="Product regular_price" class="form-control input-md" name="regular_price" value="{{product.regular_price}}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="" class="col-md-4 control-label"> Product sale_price</label>
+                            <div class="col-md-4">
+                                <input type="text" placeholder="Product sale_price" class="form-control input-md" name="sale_price" value="{{product.sale_price}}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="" class="col-md-4 control-label"> Product SKU</label>
+                            <div class="col-md-4">
+                                <input type="text" placeholder="Product SKU" class="form-control input-md" name="SKU" value="{{product.SKU}}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="" class="col-md-4 control-label"> Product stock_status</label>
+                            <div class="col-md-4">
+                                <select class="form-select-md" aria-label="Default select example" name="stock_status" value="{{product.stock_status}}" >
+                                    <option value="instock" selected>instock</option>
+                                    <option value="outofstock">outofstock</option>
+                                  </select>
+                                <!-- <input type="text" placeholder="Catagory Name" class="form-control input-md" name="catagery"> -->
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="" class="col-md-4 control-label"> Product quantity</label>
+                            <div class="col-md-4">
+                                <input type="text" placeholder="Product quantity" class="form-control input-md" name="quantity" value="{{product.quantity}}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="" class="col-md-4 control-label"> Product imagesname</label>
+                            <div class="col-md-4">
+                                <input type="file" placeholder="Product imagesname" class="form-control input-md" name="imagesname" value="{{product.imagesname}}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="" class="col-md-4 control-label"> Product category  </label>
+                            <div class="col-md-4">
+                                <select class="form-select form-select-md"  name="category" value="{{product.category}}">
+                                    {% for catagery in catageries %}
+                                    <option selected value="{{ catagery.name }}">{{ catagery.name }}</option>
+                                    {% endfor %}
+                                </select>
+                                <!-- <input type="text" placeholder="Catagory Name" class="form-control input-md" name="catagery"> -->
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="" class="col-md-4 control-label"></label>
+                            <div class="col-md-4">
+                                <button type="submit" class="btn btn-primary">Submit</button>                                
+                            </div>
+                        </div>
+                    </form>
+                   
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+</div>
+{% endblock content %}

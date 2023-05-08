@@ -25,7 +25,7 @@ about-us
 							  <ul class="slides">
 
 							    <li data-thumb="{% static 'assets/images/products/digital_018.jpg' %}">
-							    	<img src="{% static 'assets/images/products/' %}{{ product.imagesname }}" alt="product thumbnail" />
+							    	<img src="/media/{{ product.imagesname }}" alt="product thumbnail" />
 							    </li>
 
 							  
@@ -48,7 +48,7 @@ about-us
                                 {{ product.sort_description }}
                             </div>
                             <div class="wrap-social">
-                            	<a class="link-socail" href="#"><img src="{% static 'assets/images/social-list.png' %}" alt="" ></a>
+                            	<a class="link-socail" href="#"><img src="/media/{{ product.imagesname }}" alt="" ></a>
                             </div>
                             <div class="wrap-price"><span class="product-price">&#8377;{{ product.regular_price }}</span></div>
                             <div class="stock-info in-stock">
@@ -227,7 +227,7 @@ about-us
 									<div class="product product-widget-style">
 										<div class="thumbnnail">
 											<a href="{% url 'product_detail' popular_product.slug %}" title="{{ popular_product.name }}">
-												<figure><img src="{% static 'assets/images/products/' %}{{ popular_product.imagesname }}" alt="{{ popular_product.name }}"></figure>
+												<figure><img src="/media/{{ popular_product.imagesname }}" alt="{{ popular_product.name }}"></figure>
 											</a>
 										</div>
 										<div class="product-info">
@@ -258,7 +258,7 @@ about-us
 								<div class="product product-style-2 equal-elem ">
 									<div class="product-thumnail">
 										<a href="{% url 'product_detail' related_product.slug %}" title="{{ related_product.name }}">
-											<figure><img src="{% static 'assets/images/products/' %}{{ related_product.imagesname }}" width="214" height="214" alt="{{ related_product.name }}"></figure>
+											<figure><img src="/media/{{ related_product.imagesname }}" width="214" height="214" alt="{{ related_product.name }}"></figure>
 										</a>
 										<div class="group-flash">
 											<span class="flash-item new-label">new</span>

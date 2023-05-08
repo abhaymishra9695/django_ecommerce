@@ -21,7 +21,7 @@ def product_seed(n=22):
             SKU=f'DIGI{random.randint(100, 500)}'
             stock_status='instock'
             quantity=random.randint(100, 200)
-            imagesname=f'digital_0{random.randint(1,22)}.jpg'
+            imagesname=f'images/products/digital_0{random.randint(1,22)}.jpg' 
             category=category_objs[rendom_index]
             start_date = datetime.now() - timedelta(days=365)
             end_date = datetime.now()
@@ -48,13 +48,13 @@ def product_seed(n=22):
 import os
 import shutil
 
-def save_image_to_media(image_path):
+def save_image_to_media(filename):
     # Get the filename of the image
-    filename = os.path.basename(image_path)
+    # filename = os.path.basename(image_path)
 
     # Define the paths to the static and media directories
-    static_path = "/path/to/static//"
-    media_path = "/path/to/media/directory/"
+    static_path = "/static//"
+    media_path = "/media/"
 
     # Define the paths to the source and destination files
     source_file = os.path.join(static_path, filename)

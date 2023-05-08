@@ -42,15 +42,15 @@ All Product
                         <tbody>
                             {% for product in products %}
                             <tr>
-                                <td>{{ product.id }}</td>
-                                <td><img src="/media/images/products{{ product.imagesname }}" alt="{{ product.name }}" style="height: 60px;"></td>
+                                <td>{{ forloop.counter }}</td>
+                                <td><img src="/media/{{ product.imagesname }}" alt="{{ product.name }}" style="height: 60px;"></td>
                                 <td>{{ product.name }}</td>
                                 <td>{{ product.stock_status }}</td>
                                 <td>{{ product.regular_price }}</td>
                                 <td>{{ product.category }}</td>
                                 <td>{{ product.date_joined }}</td>
-                                <td><a href="{% url 'update_category' product.slug  %}" class="btn btn-warning" >Edit</a>
-                                    <a href="{% url 'delete_category' product.slug  %}" class="btn btn-danger">delete</a></td>
+                                <td><a href="{% url 'update_product' product.slug  %}" class="btn btn-warning" >Edit</a>
+                                    <a href="{% url 'delete_product' product.slug  %}" class="btn btn-danger">delete</a></td>
 
                             </tr>
                             {% endfor %}
