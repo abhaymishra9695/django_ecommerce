@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+{% block title %}
+Categories for Admin
+{% endblock %}
+{% block content %}
+<div>
+    <div class="container" style="padding: 30px 0;">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading" >
+                    <div class="row">
+
+                        <div class="col-md-6">
+                            All Slider
+                        </div>
+                        <div class="col-md-6">
+                           <a href="{% url 'add_slider' %}" class="btn btn-success pull-right">Add Slider</a> 
+                        </div>
+                    </div>
+
+             
+                </div>
+                <div class="panel-body">
+                    <table class="table table-striped"> 
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>images</th>
+                                <th>Title</th>
+                                <th>SubTitle</th>
+                                <th>price</th>
+                                <th>link</th>
+                                <th>Active</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for slider in sliders %}
+                           
+                            <tr>
+                                <td>{{ slider.id }}</td>
+                                <td><img src="/media/{{ slider.images }}" alt="{{ slider.title }}" style="height: 60px;"></td>
+                                <td>{{ slider.title }}</td>
+                                <td>{{ slider.subtitle }}</td>
+                                <td>{{ slider.price }}</td>
+                                <td>{{ slider.link }}</td>
+                                <td><a href="{% url 'edit_slider' slider.id  %}" class="btn btn-warning" >Edit</a>
+                                    <a href="{% url 'delete_slider' slider.id  %}" class="btn btn-danger">delete</a></td>
+
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    <div class="wrap-pagination-info">
+						<ul class="page-numbers">
+							{% if sliders.has_previous %}
+							<li><a class="page-number-item next-link" href="?page=1" >First</a></li>
+							<li><a class="page-number-item next-link" href="?page={{ Categories.previous_page_number }}" >Previous</a></li>
+							{% endif %}
+							{% for page in  sliders.paginator.page_range %}
+							
+							<li><span class="page-number-item" ><a class="page-link" href="?page={{ page }}">{{ page }}</a></span></li>
+							{% endfor %}
+
+							{% if sliders.has_next %}
+								<li><a class="page-number-item next-link" href="?page={{ Categories.next_page_number }}" >Next</a></li>
+								<li><a class="page-number-item next-link" href="?page={{ Categories.paginator.num_pages }}" >Last</a></li>
+
+							{% endif %}
+						</ul>
+						<p class="result-count">{% if sliders %}
+   						 Showing {{ sliders.start_index }}-{% if sliders.end_index > sliders.paginator.count %}{{ sliders.paginator.count }}{% else %}{{ sliders.end_index }}{% endif %} of {{ sliders.paginator.count }} results.
+						{% endif %}</p>
+						
+					</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+</div>
+{% endblock content %}

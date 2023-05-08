@@ -18,3 +18,6 @@ admin.site.register(Product,AdminProduct)
 
 admin.site.register(Cart)
 admin.site.register(CartItem)
+@admin.register(HomeSlider)
+class AdminSlider(admin.ModelAdmin):
+    list_display=['title','subtitle','price','link','images']

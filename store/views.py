@@ -312,3 +312,30 @@ def delete_product(request,slug):
     product=Product.objects.get(slug=slug)
     product.delete()
     return redirect('product')
+
+def slider(request):
+    slider=HomeSlider.objects.all()
+    paginator = Paginator(slider, 5)  # Show 25 contacts per page.
+    page_number = request.GET.get("page")
+    sliders= paginator.get_page(page_number)
+    return render(request,'slider.html',{"sliders":sliders})
+
+
+def add_slider(request):
+    if request.method=="POST":
+        title=  request.POST.get('title')
+        subtitle=  request.POST.get('subtitle')
+        price=  request.POST.get('price')
+        link=  request.POST.get('link')
+        images=  request.FILES.get('images')
+        return HttpResponse(images)
+        homeSlider=HomeSlider.objects.create(title=title,subtitle=subtitle,price=price,link=link,images=images) 
+        homeSlider.save()
+        return redirect('add_slider')
+    return render(request,'addslider.html')
+
+def edit_slider(request,slug):
+    pass
+
+def delete_slider(request,slug):
+    pass

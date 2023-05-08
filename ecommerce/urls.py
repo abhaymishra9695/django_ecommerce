@@ -48,6 +48,10 @@ urlpatterns = [
     path('add_product',views.add_product,name='add_product'),
     path('update_product/<slug:slug>',views.update_product,name='update_product'),
     path('delete_product/<slug:slug>',views.delete_product,name='delete_product'),
+    path('slider',views.slider,name='slider'),
+    path('add_slider',views.add_slider,name='add_slider'),
+    path('edit_slider/<slug:slug>',views.edit_slider,name='edit_slider'),
+    path('delete_slider/<slug:slug>',views.delete_slider,name='delete_slider'),
 ]
 
 if settings.DEBUG:

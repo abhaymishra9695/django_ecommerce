@@ -84,6 +84,17 @@ class CartItem(models.Model):
     
 
     
+class HomeSlider(models.Model):
+    title=models.CharField(max_length=200)
+    subtitle=models.CharField(max_length=100)
+    price=models.FloatField()
+    link=models.CharField(max_length=100)
+    images = models.ImageField(upload_to='images/slider')
+    # status=models.BooleanField()
+    
+
+    
+
       
         
         
