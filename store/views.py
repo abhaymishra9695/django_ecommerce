@@ -13,7 +13,9 @@ User = get_user_model()
 # Create your views here.
 
 def home(request):
-    return render(request,'home.html')
+    slider=HomeSlider.objects.all()
+    products=Product.objects.all().order_by('-date_joined')[:8]
+    return render(request,'home.html',{"sliders":slider,"products":products})
 
 
 def cart(request):   # sourcery skip: remove-unreachable-code
@@ -328,14 +330,26 @@ def add_slider(request):
         price=  request.POST.get('price')
         link=  request.POST.get('link')
         images=  request.FILES.get('images')
-        return HttpResponse(images)
+        # return HttpResponse(images)
         homeSlider=HomeSlider.objects.create(title=title,subtitle=subtitle,price=price,link=link,images=images) 
         homeSlider.save()
-        return redirect('add_slider')
+        return redirect('slider')
     return render(request,'addslider.html')
 
-def edit_slider(request,slug):
-    pass
+def edit_slider(request,id):
+    slider=HomeSlider.objects.get(id=id)
+    if request.method=="POST":
+        slider.title=  request.POST.get('title')
+        slider.subtitle=  request.POST.get('subtitle')
+        slider.price=  request.POST.get('price')
+        slider.link=  request.POST.get('link')
+        slider.images=  request.FILES.get('images')
+        # return HttpResponse(images)
+        slider.save()
+        return redirect('slider')
+    return render(request,'editslider.html',{"slider":slider})
 
-def delete_slider(request,slug):
-    pass
+def delete_slider(request,id):
+    slider=HomeSlider.objects.get(id=id)
+    slider.delete()
+    return redirect('slider')

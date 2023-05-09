@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% block title %}
+Categories for Admin
+{% endblock %}
+{% block content %}
+<div>
+    <div class="container" style="padding: 30px 0;">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading" >
+                    <div class="row">
+
+                        <div class="col-md-6">
+                            Update Slider
+                        </div>
+                        <div class="col-md-6">
+                           <a href="{% url 'slider' %}" class="btn btn-success pull-right">All Slider</a> 
+                        </div>
+                    </div>
+
+             
+                </div>
+                <div class="panel-body">
+                    <form action="" class="form-horizontal" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="" class="col-md-4 control-label"> Slider Title</label>
+                            <div class="col-md-4">
+                                <input type="text" placeholder="Title" class="form-control input-md" name="title" value="{{slider.title}}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="" class="col-md-4 control-label"> Slider Subtitle</label>
+                            <div class="col-md-4">
+                                <input type="text" placeholder="Subtitle" class="form-control input-md" name="subtitle" value="{{slider.subtitle}}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="" class="col-md-4 control-label"> Slider Price</label>
+                            <div class="col-md-4">
+                                <input type="number" placeholder="Price" class="form-control input-md" name="price" value="{{slider.price}}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="" class="col-md-4 control-label"> slider Link</label>
+                            <div class="col-md-4">
+                                <input type="text" placeholder="Link" class="form-control input-md" name="link" value="{{slider.link}}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="" class="col-md-4 control-label"> slider images</label>
+                            <div class="col-md-4">
+                                <input type="file" placeholder="images" class="form-control input-md input-file" name="images" value="{{slider.images}}">
+                            </div>
+                        </div>
+                        <!-- <div class="form-group">
+                            <label for="" class="col-md-4 control-label"> slider Status</label>
+                            <div class="col-md-4">
+                                <select class="form-select-md"  name="status" >
+                                    <option value="true" selected>true</option>
+                                    <option value="False">False</option>
+                                </select>                            </div>
+                        </div> -->
+                        <div class="form-group">
+                            <label for="" class="col-md-4 control-label"></label>
+                            <div class="col-md-4">
+                                <button type="submit" class="btn btn-primary">Submit</button>                                
+                            </div>
+                        </div>
+                    </form>
+                   
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+</div>
+{% endblock content %}

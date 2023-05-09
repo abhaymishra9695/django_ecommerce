@@ -38,7 +38,7 @@ Categories for Admin
                             {% for slider in sliders %}
                            
                             <tr>
-                                <td>{{ slider.id }}</td>
+                                <td>{{ forloop.counter }}</td>
                                 <td><img src="/media/{{ slider.images }}" alt="{{ slider.title }}" style="height: 60px;"></td>
                                 <td>{{ slider.title }}</td>
                                 <td>{{ slider.subtitle }}</td>
