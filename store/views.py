@@ -18,10 +18,20 @@ def home(request):
     slider=HomeSlider.objects.all()
     products=Product.objects.all().order_by('-date_joined')[:8]
     category=HomeCategory.objects.get(id=1)
-    # catageries= Category.objects.filter(id=category.sel_categories)
-    return HttpResponse(category)
-    users = MyObject.objects.filter(email=emailaddress)
-    return render(request,'home.html',{"sliders":slider,"products":products,"catageries":catageries,"category":category})
+    catageries_ids=category.sel_categories
+    string_list = catageries_ids.split(" ")
+    category_ids = list(map(int, string_list))
+    catageries = Category.objects.filter(id__in=category_ids)
+    for category in catageries:
+        for prodect in category.product_set.all():
+            print(prodect)
+        
+    # products = Product.objects.filter(category__id__in=category_ids)
+    # category = Category.objects.get(id=1)  # Get the category with ID 1
+    # products = category.product_set.all()  # Retrieve all products related to the category
+ 
+
+    return render(request,'home.html',{"sliders":slider,"products":products,"catageries":catageries})
 
 
 def cart(request):   # sourcery skip: remove-unreachable-code
@@ -283,7 +293,7 @@ def add_product(request):
 
     return render(request,'add_product.html',{"catageries":catageries})
 
-def update_product(request,slug):
+def update_product(request,slug):  # sourcery skip: extract-method
     catageries=Category.objects.all()
     product=Product.objects.get(slug=slug)
     if request.method=="POST":
@@ -329,7 +339,7 @@ def slider(request):
     return render(request,'slider.html',{"sliders":sliders})
 
 
-def add_slider(request):
+def add_slider(request):  # sourcery skip: last-if-guard
     if request.method=="POST":
         title=  request.POST.get('title')
         subtitle=  request.POST.get('subtitle')
@@ -363,16 +373,16 @@ def delete_slider(request,id):
 
 def Manage_Home_Categories(request):
     home_categories= HomeCategory.objects.get(id=1)
-    # return HttpResponse(categories.sel_categories)
     categories=Category.objects.all()
     if request.method=="POST":
         categories_id=  request.POST.getlist('categories')
         categories_quntaty=request.POST.get('categories_quntaty')
+        strList = [str(i) for i in categories_id]
+        categories_id = " ".join(strList)
         home_categories.sel_categories=categories_id
         home_categories.no_of_product=categories_quntaty
         home_categories.save()
         return redirect('home')
-        # return HttpResponse(categories_quntaty)
     return render(request,'add_homa_page_category.html',{"categories":categories,"home_categories":home_categories})
 
 
