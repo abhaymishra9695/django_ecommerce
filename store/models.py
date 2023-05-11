@@ -36,6 +36,9 @@ class Category(models.Model):
 
     def __str__(self):
         return self.name 
+ 
+    def get_products(self):
+         return Product.objects.filter(category=self.slug)
         
 
 class Product(models.Model):
@@ -54,7 +57,7 @@ class Product(models.Model):
     feature = models.BooleanField(default=False)
     quantity = models.IntegerField(default=10)
     imagesname = models.ImageField(upload_to='images/products')
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE ,related_name="products")
     date_joined = models.DateTimeField(default=timezone.now)
 
     def __str__(self):

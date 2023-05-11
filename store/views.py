@@ -22,9 +22,10 @@ def home(request):
     string_list = catageries_ids.split(" ")
     category_ids = list(map(int, string_list))
     catageries = Category.objects.filter(id__in=category_ids)
+    # return HttpResponse(catageries.get_products)
     for category in catageries:
-        for prodect in category.product_set.all():
-            print(prodect)
+     
+            print(Product.objects.filter(category=category.id))
         
     # products = Product.objects.filter(category__id__in=category_ids)
     # category = Category.objects.get(id=1)  # Get the category with ID 1
