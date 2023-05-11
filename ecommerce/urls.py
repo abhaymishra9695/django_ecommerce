@@ -52,6 +52,8 @@ urlpatterns = [
     path('add_slider',views.add_slider,name='add_slider'),
     path('edit_slider/<id>',views.edit_slider,name='edit_slider'),
     path('delete_slider/<id>',views.delete_slider,name='delete_slider'),
+    path('add-home-page-categories',views.Manage_Home_Categories,name='homepagecategory'),
+
 ]
 
 if settings.DEBUG:

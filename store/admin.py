@@ -21,3 +21,7 @@ admin.site.register(CartItem)
 @admin.register(HomeSlider)
 class AdminSlider(admin.ModelAdmin):
     list_display=['title','subtitle','price','link','images']
+
+@admin.register(HomeCategory)
+class AdminHomeCategory(admin.ModelAdmin):
+    list_display=['sel_categories','no_of_product']

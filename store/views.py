@@ -13,9 +13,15 @@ User = get_user_model()
 # Create your views here.
 
 def home(request):
+
+  
     slider=HomeSlider.objects.all()
     products=Product.objects.all().order_by('-date_joined')[:8]
-    return render(request,'home.html',{"sliders":slider,"products":products})
+    category=HomeCategory.objects.get(id=1)
+    # catageries= Category.objects.filter(id=category.sel_categories)
+    return HttpResponse(category)
+    users = MyObject.objects.filter(email=emailaddress)
+    return render(request,'home.html',{"sliders":slider,"products":products,"catageries":catageries,"category":category})
 
 
 def cart(request):   # sourcery skip: remove-unreachable-code
@@ -353,3 +359,20 @@ def delete_slider(request,id):
     slider=HomeSlider.objects.get(id=id)
     slider.delete()
     return redirect('slider')
+
+
+def Manage_Home_Categories(request):
+    home_categories= HomeCategory.objects.get(id=1)
+    # return HttpResponse(categories.sel_categories)
+    categories=Category.objects.all()
+    if request.method=="POST":
+        categories_id=  request.POST.getlist('categories')
+        categories_quntaty=request.POST.get('categories_quntaty')
+        home_categories.sel_categories=categories_id
+        home_categories.no_of_product=categories_quntaty
+        home_categories.save()
+        return redirect('home')
+        # return HttpResponse(categories_quntaty)
+    return render(request,'add_homa_page_category.html',{"categories":categories,"home_categories":home_categories})
+
+

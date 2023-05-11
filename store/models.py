@@ -92,7 +92,10 @@ class HomeSlider(models.Model):
     images = models.ImageField(upload_to='images/slider')
     # status=models.BooleanField()
     
-
+class HomeCategory(models.Model):
+    sel_categories=models.CharField(max_length=150)
+    no_of_product=models.IntegerField()
+    date_joined = models.DateTimeField(default=timezone.now)
     
 
       
