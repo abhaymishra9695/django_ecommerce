@@ -31,6 +31,7 @@ All Product
                                 <th>Product Name</th>
                                 <th>stock_status</th>
                                 <th>regular_price</th>
+                                <th>sale_price</th>
                                 <th>category</th>
                                 <th>date_joined</th>
                                 <th>Action</th>
@@ -47,6 +48,7 @@ All Product
                                 <td>{{ product.name }}</td>
                                 <td>{{ product.stock_status }}</td>
                                 <td>{{ product.regular_price }}</td>
+                                <td>{{ product.sale_price }}</td>
                                 <td>{{ product.category }}</td>
                                 <td>{{ product.date_joined }}</td>
                                 <td><a href="{% url 'update_product' product.slug  %}" class="btn btn-warning" >Edit</a>

@@ -22,6 +22,8 @@ def home(request):
     string_list = catageries_ids.split(" ")
     category_ids = list(map(int, string_list))
     catageries = Category.objects.filter(id__in=category_ids)
+    sprodects = Product.objects.filter(sale_price__gt=0)[:8]
+
     # return HttpResponse(catageries.get_products)
     for category in catageries:
      
@@ -32,7 +34,7 @@ def home(request):
     # products = category.product_set.all()  # Retrieve all products related to the category
  
 
-    return render(request,'home.html',{"sliders":slider,"products":products,"catageries":catageries})
+    return render(request,'home.html',{"sliders":slider,"products":products,"catageries":catageries,"sprodects":sprodects})
 
 
 def cart(request):   # sourcery skip: remove-unreachable-code
