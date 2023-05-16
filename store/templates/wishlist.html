@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% block title %}
+shop
+{% endblock %}
+{%  block content %}
+{% block style %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/14.6.3/nouislider.min.css">
+{% endblock %}
+{% load static %}
+	<main id="main" class="main-site left-sidebar">
+
+		<div class="container">
+
+			<div class="wrap-breadcrumb">
+				<ul>
+					<li class="item-link"><a href="{% url 'home' %}" class="link">home</a></li>
+					<li class="item-link"><span>Wishlist</span></li>
+				</ul>
+			</div>
+            <style>
+                .product-wish{
+                    position: absolute;
+                    top: 10%;
+                    left: 0;
+                    z-index: 99;
+                    right: 30px;
+                    text-align: right;
+                    padding-top:0 ;
+                }
+                .product-wish .fa{
+                    color: #cbcbcb;
+                    font-size: 32px;
+                }
+                .product-wish .fa:hover{
+                    color: #ff7007;
+                }
+                .fill-heart{
+                    color: #ff7007 !important;
+                }
+            </style>
+            <div class="row">
+                {% if request.user.get_wish_count > 0 %}
+                <ul class="product-list grid-products equal-container">
+                    {% for items in wishlist_items %}
+                    <li class="col-lg-3 col-md-6 col-sm-6 col-xs-6 ">
+                        <div class="product product-style-3 equal-elem ">
+                            <div class="product-thumnail">
+                                <a href="{% url 'product_detail' items.product.slug %}" title="{{ items.product.name }}">
+                                    <img src="/media/{{ items.product.imagesname }}" alt="{{ items.product.name }}">
+                                </a>
+                            </div>
+                            <div class="product-info">
+                                <a href="#" class="product-name"><span>{{ items.product.name }}</span></a>
+                                <div class="wrap-price"><span class="product-price">&#8377;{{ items.product.regular_price }} {{ wishlist.find_product }}</span></div>
+                                <a href="{% url 'add_cart_product' items.product.slug  %}" class="btn add-to-cart">Add To Cart</a>
+                                <div class="product-wish">
+                                    {% if items.product.wishlist_set.count >  0 %}
+                                    <a href="{% url 'deletewishlist' items.product.id %}"><i class="fa fa-heart fill-heart"></i></a>
+                                    {% else %}
+                                    <a href="{% url 'wishlist' items.product.id %}"><i class="fa fa-heart"></i></a>
+                                    {% endif %}
+
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+
+                    {% endfor %}
+                </ul>
+
+            </div>
+            {% else %}
+            <h4>No item in wishlist</h4>
+            {% endif %}
+        </div>
+    </main>
+    {%  endblock content %}

@@ -406,7 +406,15 @@ def wishlist(request,id):
     Wishlist.objects.create(user=request.user, product_id=id)
     return redirect('shop') 
 
-def deletewishlist(reqquest,id):
+def deletewishlist(request,id):
     wishitem= Wishlist.objects.get(product_id=id)
     wishitem.delete()
     return redirect('shop') 
+
+def wishlistproduct(request):
+    user = CustomUser.objects.get(id=request.user.id)  # Assuming you have the user_id available
+    wishlist_items = Wishlist.objects.filter(user=user)
+    # products = [item.product for item in wishlist_items]
+   
+
+    return render(request,'wishlist.html',{"wishlist_items":wishlist_items})
