@@ -17,7 +17,7 @@ def product_seed(n=22):
             product_slug=slugify(product_name)
             sort_description=fake.paragraph(nb_sentences=1, variable_nb_sentences=True)
             description=fake.paragraphs(nb=3, ext_word_list=None)
-            regular_price=Decimal(random.uniform(100, 100000))
+            regular_price=Decimal(random.uniform(50, 1000))
             SKU=f'DIGI{random.randint(100, 500)}'
             stock_status='instock'
             quantity=random.randint(100, 200)

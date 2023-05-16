@@ -52,7 +52,7 @@ shop
                             <div class="product-info">
                                 <a href="#" class="product-name"><span>{{ items.product.name }}</span></a>
                                 <div class="wrap-price"><span class="product-price">&#8377;{{ items.product.regular_price }} {{ wishlist.find_product }}</span></div>
-                                <a href="{% url 'add_cart_product' items.product.slug  %}" class="btn add-to-cart">Add To Cart</a>
+                                <a href="{% url 'move_to_cart' items.product.slug  %}" class="btn add-to-cart">Move To Cart</a>
                                 <div class="product-wish">
                                     {% if items.product.wishlist_set.count >  0 %}
                                     <a href="{% url 'deletewishlist' items.product.id %}"><i class="fa fa-heart fill-heart"></i></a>

@@ -414,7 +414,18 @@ def deletewishlist(request,id):
 def wishlistproduct(request):
     user = CustomUser.objects.get(id=request.user.id)  # Assuming you have the user_id available
     wishlist_items = Wishlist.objects.filter(user=user)
+    
     # products = [item.product for item in wishlist_items]
    
 
     return render(request,'wishlist.html',{"wishlist_items":wishlist_items})
+
+def move_to_cart(request,slug):
+    product=Product.objects.get(slug=slug)
+    user=request.user
+    cart,_=Cart.objects.get_or_create(user=user,is_paid=False)
+    cartitem=CartItem.objects.create(cart=cart,product=product) 
+    cartitem.save()
+    wish=Wishlist.objects.get(user=request.user, product_id=product.id)
+    wish.delete()
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
