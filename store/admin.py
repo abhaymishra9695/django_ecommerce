@@ -25,3 +25,11 @@ class AdminSlider(admin.ModelAdmin):
 @admin.register(HomeCategory)
 class AdminHomeCategory(admin.ModelAdmin):
     list_display=['sel_categories','no_of_product']
+
+@admin.register(Sale)
+class AdminSale(admin.ModelAdmin):
+    list_display=['saledate','status']
+
+@admin.register(Wishlist)
+class AdminSale(admin.ModelAdmin):
+    list_display=['user','product']

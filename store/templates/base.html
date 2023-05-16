@@ -91,6 +91,9 @@
 											<a title="Manage Home Slider" href="{% url 'slider' %}">Manage Home Slider</a>
 										</li>
 										<li class="menu-item" >
+											<a title="product for sale" href="{% url 'sale' %}">sale satting</a>
+										</li>
+										<li class="menu-item" >
 											<a title="Manage Home Category" href="{% url 'homepagecategory' %}">Manage Home Category</a>
 										</li>
 										<li class="menu-item" >
@@ -143,14 +146,28 @@
 								</form>
 							</div>
 						</div>
-
+						<style>
+							.fill-heart{
+						color: #ff7007 !important;
+							}
+						</style>
 						<div class="wrap-icon right-section">
 							<div class="wrap-icon-section wishlist">
 								<a href="#" class="link-direction">
+
+									{% if request.user.is_authenticated %}
+									{% if request.user.get_wish_count > 0 %}
+									<i class="fa fa-heart fill-heart" aria-hidden="true"></i>
+									{% else %}
 									<i class="fa fa-heart" aria-hidden="true"></i>
+									{% endif %}
 									<div class="left-info">
+										<span class="index">{{ request.user.get_wish_count }} item</span>
+										<span class="title">Wishlist</span>
+										{% else %}
 										<span class="index">0 item</span>
 										<span class="title">Wishlist</span>
+										{% endif %}
 									</div>
 								</a>
 							</div>
@@ -279,7 +296,7 @@
 
 			<div class="main-footer-content">
 
-				<div class="container">
+				<body class="container">
 
 					<div class="row">
 
@@ -489,7 +506,6 @@
 	</footer>
 	{% block js %}
     {% endblock %}
-
 	<script src="{% static 'assets/js/jquery.min.js' %}"></script>
 	<script src="{% static 'assets/js/jquery-1.12.4.minb8ff.js?ver=1.12.4' %}"></script>
 	<script src="{% static 'assets/js/jquery-ui-1.12.4.minb8ff.js?ver=1.12.4' %}"></script>
@@ -501,6 +517,5 @@
 	<script src="{% static 'assets/js/jquery.sticky.js' %}"></script>
 	<script src="{% static 'assets/js/functions.js' %}"></script>
 	<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-
 </body>
 </html>

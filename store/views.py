@@ -7,14 +7,14 @@ from django.contrib.auth import get_user_model
 from django.utils.text import slugify
 from .seed import * 
 from .models import *
+from django.db.models import Max,Min
 from django.db.models import  Q
 User = get_user_model()
 
 # Create your views here.
 
 def home(request):
-
-  
+    
     slider=HomeSlider.objects.all()
     products=Product.objects.all().order_by('-date_joined')[:8]
     category=HomeCategory.objects.get(id=1)
@@ -23,7 +23,7 @@ def home(request):
     category_ids = list(map(int, string_list))
     catageries = Category.objects.filter(id__in=category_ids)
     sprodects = Product.objects.filter(sale_price__gt=0)[:8]
-
+    sale=Sale.objects.get(id=1)
     # return HttpResponse(catageries.get_products)
     for category in catageries:
      
@@ -34,7 +34,7 @@ def home(request):
     # products = category.product_set.all()  # Retrieve all products related to the category
  
 
-    return render(request,'home.html',{"sliders":slider,"products":products,"catageries":catageries,"sprodects":sprodects})
+    return render(request,'home.html',{"sliders":slider,"products":products,"catageries":catageries,"sprodects":sprodects,"sale":sale})
 
 
 def cart(request):   # sourcery skip: remove-unreachable-code
@@ -47,10 +47,12 @@ def aboutus(request):
     return render(request,'aboutus.html') 
 
 def shop(request):  # sourcery skip: merge-comparisons, merge-duplicate-blocks, remove-pass-body, remove-redundant-if, remove-unreachable-code
-   
+    min_price = (request.GET.get("min_price", 1))
+    max_price = (request.GET.get("max_price", 10000))
+    # return HttpResponse(min_price)
     product_sorting=request.GET.get("productsorting")
     if product_sorting=="date":
-        product_list=Product.objects.all().order_by('date_joined')
+        product_list=Product.objects.all().order_by('date_joined')  
     elif product_sorting=="price":
          product_list=Product.objects.all().order_by('regular_price')
     elif product_sorting=="price-desc":
@@ -81,7 +83,7 @@ def shop(request):  # sourcery skip: merge-comparisons, merge-duplicate-blocks, 
     paginator = Paginator(product_list, post_per_page)  # Show 25 contacts per page.
     page_number = request.GET.get("page")
     product= paginator.get_page(page_number)
-    return render(request,'shop.html',{"products":product,"catageries":catageries})
+    return render(request,'shop.html',{"products":product,"catageries":catageries,"min":min_price,"max":max_price})
 
 
 
@@ -130,7 +132,8 @@ def product_detail(request, slug):
     all_products = Product.objects.all()
     popular_products = random.sample(list(all_products), 4)
     related_products=Product.objects.filter(category=product.category)
-    return render(request,'detail.html',{'product':product,'popular_products':popular_products,'related_products':related_products})
+    sale=Sale.objects.get(id=1)
+    return render(request,'detail.html',{'product':product,'popular_products':popular_products,'related_products':related_products,'sale':sale,})
 
 
 def add_cart_product(request,slug):
@@ -389,3 +392,21 @@ def Manage_Home_Categories(request):
     return render(request,'add_homa_page_category.html',{"categories":categories,"home_categories":home_categories})
 
 
+def sale(request):
+    sale=Sale.objects.get(id=1)
+    if request.method=="POST":
+        status=request.POST.get('status')
+        saledate=request.POST.get('saledate')
+        sale.status=status
+        sale.saledate=saledate
+        sale.save()
+    return render(request,'sale_products.html')
+
+def wishlist(request,id):
+    Wishlist.objects.create(user=request.user, product_id=id)
+    return redirect('shop') 
+
+def deletewishlist(reqquest,id):
+    wishitem= Wishlist.objects.get(product_id=id)
+    wishitem.delete()
+    return redirect('shop') 

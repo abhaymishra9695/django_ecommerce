@@ -2,6 +2,8 @@
 {% block title %}
 home
 {% endblock %}
+{% block style %}
+{% endblock %}
 {% block content %}
 {% load static %}
 
@@ -59,10 +61,17 @@ home
 			</div>
 
 			<!--On Sale-->
-			{% if sprodects.count > 0 %}
+			{% load tz %}
+
+			
+		
+		
+		
+		
+			{% if sprodects.count > 0 and sale.status == 1  %}
 			<div class="wrap-show-advance-info-box style-1 has-countdown">
 				<h3 class="title-box">On Sale</h3>
-				<div class="wrap-countdown mercado-countdown" data-expire="2020/12/12 12:34:56"></div>
+				<div class="wrap-countdown mercado-countdown" data-expire="{{ sale.saledate|date:'Y/m/d H:i:s' }}" style="width: auto"></div>
 				<div class="wrap-products slide-carousel owl-carousel style-nav-1 equal-container " data-items="5" data-loop="false" data-nav="true" data-dots="false" data-responsive='{"0":{"items":"1"},"480":{"items":"2"},"768":{"items":"3"},"992":{"items":"4"},"1200":{"items":"5"}}'>
 					{% for sproduct in sprodects %}
 					<div class="product product-style-2 equal-elem ">
@@ -79,13 +88,18 @@ home
 						</div>
 						<div class="product-info">
 							<a href="#" class="product-name"><span>{{sproduct.name}}</span></a>
-							<div class="wrap-price"><span class="product-price">&#8377;{{ sproduct.regular_price }}</span></div>
+							
+							<div class="wrap-price"><span class="product-price">&#8377;{{ sproduct.sale_price }}</span></span></div>
+							<!-- <del><del< class="wrap-price"><span class="product-price regprice">&#8377;{{ sproduct.regular_price }}</span></div></del> -->
+						
 						</div>
 					</div>
 					{% endfor %}
 				</div>
 			</div>
+		
 			{% endif %}
+
 			<!--Latest Products-->
 			<div class="wrap-show-advance-info-box style-1">
 				<h3 class="title-box">Latest Products</h3>

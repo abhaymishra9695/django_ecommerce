@@ -53,6 +53,10 @@ urlpatterns = [
     path('edit_slider/<id>',views.edit_slider,name='edit_slider'),
     path('delete_slider/<id>',views.delete_slider,name='delete_slider'),
     path('add-home-page-categories',views.Manage_Home_Categories,name='homepagecategory'),
+    path('sale',views.sale,name='sale'),
+    path('wishlist/<id>', views.wishlist, name='wishlist'),
+    path('deletewishlist/<id>', views.deletewishlist, name='deletewishlist'),
+
 
 ]
 

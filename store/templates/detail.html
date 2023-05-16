@@ -58,7 +58,7 @@ about-us
                             <div class="wrap-social">
                             	<a class="link-socail" href="#"><img src="/media/{{ product.imagesname }}" alt="" ></a>
                             </div>
-							{% if product.sale_price > 0 %}
+							{% if product.sale_price > 0 and sale.status == 1  %}
                             <div class="wrap-price">
 								<span class="product-price">&#8377;{{ product.sale_price }}</span>
 								<del><span class="product-price regprice">&#8377;{{ product.regular_price }}</span></del>
@@ -80,7 +80,7 @@ about-us
 							</div>
 							<div class="wrap-butons">
 								<a href="{% url 'add_cart_product' product.slug  %}" class="btn add-to-cart">Add to Cart</a>
-                                <div class="wrap-btn">
+\                                <div class="wrap-btn">
                                     <a href="#" class="btn btn-compare">Add Compare</a>
                                     <a href="#" class="btn btn-wishlist">Add Wishlist</a>
                                 </div>

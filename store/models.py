@@ -23,6 +23,9 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     def get_cart_count(self):
         return CartItem.objects.filter(cart__is_paid=False, cart__user=self).count()
+    def get_wish_count(self):
+        return Wishlist.objects.filter(user=self).count()
+
 
     def __str__(self):
         return self.email   
@@ -51,7 +54,7 @@ class Product(models.Model):
     sort_description=models.CharField(max_length = 300,null=True)
     description = models.TextField()
     regular_price = models.DecimalField(decimal_places=2,max_digits=10)
-    sale_price = models.DecimalField(decimal_places=2,max_digits=10, null=True)
+    sale_price = models.DecimalField(decimal_places=2,max_digits=10,default=0)
     SKU = models.CharField(max_length = 150)
     stock_status = models.CharField(max_length = 150,choices=stock_status)
     feature = models.BooleanField(default=False)
@@ -62,7 +65,7 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name         
-        
+    
         
 class Cart(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE,related_name="carts")
@@ -72,7 +75,11 @@ class Cart(models.Model):
         price=[]
         cart_items=self.cart_items.all()
         for cart_item in cart_items:
-            product_price=cart_item.product.regular_price*cart_item.quantity
+            if cart_item.product.sale_price > 0:
+                product_price=cart_item.product.sale_price*cart_item.quantity
+            else:
+                product_price=cart_item.product.regular_price*cart_item.quantity
+
             price.append(product_price)
         return sum(price)
 
@@ -82,7 +89,10 @@ class CartItem(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True, blank=True)
     quantity = models.PositiveIntegerField(default=1)
     def get_product_price(self):
-        product_price=self.product.regular_price*self.quantity
+        if self.product.sale_price > 0:
+            product_price=self.product.sale_price*self.quantity  
+        else:
+            product_price=self.product.regular_price*self.quantity
         return product_price
     
 
@@ -101,11 +111,18 @@ class HomeCategory(models.Model):
     date_joined = models.DateTimeField(default=timezone.now)
     
 
-      
-        
-        
-        
-        
+class Sale(models.Model):
+    BOOL_CHOICES = ((1, 'ACTIVE'), (0, 'INACTIVE'))
+    status= models.BooleanField(choices=BOOL_CHOICES)      
+    saledate = models.DateTimeField()
 
-        
-          
+
+    def __str__(self):
+        return str(self.saledate.strftime('%Y-%m-%d %H:%M:%S')) 
+
+
+class Wishlist(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+
+
