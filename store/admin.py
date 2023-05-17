@@ -33,3 +33,7 @@ class AdminSale(admin.ModelAdmin):
 @admin.register(Wishlist)
 class AdminSale(admin.ModelAdmin):
     list_display=['user','product']
+
+@admin.register(Coupons)
+class AdminSale(admin.ModelAdmin):
+    list_display=['code','type','cart_value','value']

@@ -58,6 +58,10 @@ urlpatterns = [
     path('deletewishlist/<id>', views.deletewishlist, name='deletewishlist'),
     path('wishlistproduct', views.wishlistproduct, name='wishlistproduct'),
     path('move_to_cart/<slug>', views.move_to_cart, name='move_to_cart'),
+    path('coupons',views.coupons,name='coupons'),
+    path('add_coupon',views.add_coupon,name='add_coupon'),
+    path('edit_coupon/<id>',views.edit_coupon,name='edit_coupon'),
+    path('delete_coupon/<id>',views.delete_coupon,name='delete_coupon'),
 
 ]
 

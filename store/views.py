@@ -429,3 +429,33 @@ def move_to_cart(request,slug):
     wish=Wishlist.objects.get(user=request.user, product_id=product.id)
     wish.delete()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+def coupons(request):
+    coupons=Coupons.objects.all()
+    return render(request,'coupons.html',{"coupons":coupons})
+def add_coupon(request):
+    if request.method=="POST":
+        code=request.POST.get('code')
+        type=request.POST.get('type')
+        value=request.POST.get('value')
+        cart_value=request.POST.get('cart_value')
+        coupons= Coupons.objects.create(code=code,type=type,value=value,cart_value=cart_value)
+        coupons.save()
+        return redirect('coupons')
+    return render(request,'add_coupons.html')
+def edit_coupon(request,id):
+    coupon=Coupons.objects.get(id=id)
+    if request.method=="POST":
+        code=request.POST.get('code')
+        type=request.POST.get('type')
+        value=request.POST.get('value')
+        cart_value=request.POST.get('cart_value')
+        coupons= Coupons.objects.create(code=code,type=type,value=value,cart_value=cart_value)
+        coupons.save()
+        return redirect('coupons')
+    return render(request,'edit_coupons.html',{"coupon":coupon})
+
+def delete_coupon(request,id):
+    coupon=Coupons.objects.get(id=id)
+    coupon.delete()
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER')) 

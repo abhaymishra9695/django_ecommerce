@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% block title %}
+Categories for Admin
+{% endblock %}
+{% block content %}
+<div>
+    <div class="container" style="padding: 30px 0;">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading" >
+                    <div class="row">
+
+                        <div class="col-md-6">
+                            All Coupons
+                        </div>
+                        <div class="col-md-6">
+                           <a href="{% url 'add_coupon' %}" class="btn btn-success pull-right">Add Coupons</a> 
+                        </div>
+                    </div>
+
+             
+                </div>
+                <div class="panel-body">
+                    <table class="table table-striped"> 
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Code</th>
+                                <th>Type</th>
+                                <th>Value</th>
+                                <th>Cart_Value</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for coupon in coupons%}
+                            <tr>
+                                <td>{{ coupon.id }}</td>
+                                <td>{{ coupon.code }}</td>
+                               
+                                <td>{{ coupon.type }}</td>
+                                {% if coupon.type == "fixed" %}
+                                <td>{{ coupon.value }}</td>
+                                {% else %}
+                                <td>{{ coupon.value }} %</td>
+                                {% endif %}
+                                <td>{{ coupon.cart_value }}</td>
+                                <td><a href="{% url 'edit_coupon' coupon.id  %}" class="btn btn-warning" >Edit</a>
+                                    <a href="{% url 'delete_coupon' coupon.id  %}" onclick="confirm('Are you sure, You want to delete this ?')" class="btn btn-danger">delete</a></td>
+
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    <div class="wrap-pagination-info">
+						<ul class="page-numbers">
+							{% if Categories.has_previous %}
+							<li><a class="page-number-item next-link" href="?page=1" >First</a></li>
+							<li><a class="page-number-item next-link" href="?page={{ Categories.previous_page_number }}" >Previous</a></li>
+							{% endif %}
+							{% for page in  Categories.paginator.page_range %}
+							
+							<li><span class="page-number-item" ><a class="page-link" href="?page={{ page }}">{{ page }}</a></span></li>
+							{% endfor %}
+
+							{% if Categories.has_next %}
+								<li><a class="page-number-item next-link" href="?page={{ Categories.next_page_number }}" >Next</a></li>
+								<li><a class="page-number-item next-link" href="?page={{ Categories.paginator.num_pages }}" >Last</a></li>
+
+							{% endif %}
+						</ul>
+						<p class="result-count">{% if Categories %}
+   						 Showing {{ Categories.start_index }}-{% if Categories.end_index > Categories.paginator.count %}{{ Categories.paginator.count }}{% else %}{{ Categories.end_index }}{% endif %} of {{ Categories.paginator.count }} results.
+						{% endif %}</p>
+						
+					</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+</div>
+{% endblock content %}

@@ -126,3 +126,14 @@ class Wishlist(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
 
 
+
+class Coupons(models.Model):
+    types=[
+    ("fixed", "fixed"),
+    ("percent", "percent"),
+    ]
+    code =models.CharField(max_length=100)
+    type=models.CharField(max_length=100, choices=types)
+    value=models.DecimalField(decimal_places=0,max_digits=5)
+    cart_value=models.DecimalField(decimal_places=0,max_digits=7)
+    date_joined = models.DateTimeField(default=timezone.now)        
