@@ -9,6 +9,7 @@ from .seed import *
 from .models import *
 from django.db.models import Max,Min
 from django.db.models import  Q
+from django.utils import timezone
 User = get_user_model()
 
 # Create your views here.
@@ -44,14 +45,21 @@ def cart(request):   # sourcery skip: remove-unreachable-code
         coupon = request.POST.get('coupon')
         try:
             coupon_obj = Coupons.objects.get(code=coupon)
-           
+            # return HttpResponse(coupon_obj.expire_date.date())
         except Coupons.DoesNotExist:
             # Invalid coupon, raise Http404 or handle the error accordingly
             return HttpResponse("Invalid coupon")
-        if cart.Coupon:
-            return HttpResponse("coupon already exist")
+        current_datetime = timezone.now()   
+        if coupon_obj.expire_date.date() < current_datetime.date() or (coupon_obj.expire_date.date() == current_datetime.date() and coupon_obj.expire_date.time() < current_datetime.time()):
+            return HttpResponse("Coupon has expired")
+            
+
+
+
             #pahale se to nahi apply hai(coupon already exist )
             return HttpResponseRedirect(request.META.get('HTTP_REFERER')) 
+    
+
         if cart.get_cart_total()<coupon_obj.minimum_amount:
             return HttpResponse(f'Amount should be greater than {coupon_obj.minimum_amount}')
         cart.Coupon=coupon_obj
@@ -455,7 +463,8 @@ def add_coupon(request):
         type=request.POST.get('type')
         value=request.POST.get('value')
         cart_value=request.POST.get('cart_value')
-        coupons= Coupons.objects.create(code=code,type=type,value=value,minimum_amount=cart_value)
+        expire_date=request.POST.get('expire_date')
+        coupons= Coupons.objects.create(code=code,type=type,value=value,minimum_amount=cart_value,expire_date=expire_date)
         coupons.save()
         return redirect('coupons')
     return render(request,'add_coupons.html')
@@ -466,10 +475,14 @@ def edit_coupon(request,id):
         type=request.POST.get('type')
         value=request.POST.get('value')
         cart_value=request.POST.get('cart_value')
+        expire_date=request.POST.get('expire_date')
         coupon.code=code
         coupon.type=type
         coupon.value=value
         coupon.minimum_amount=cart_value
+        coupon.expire_date=expire_date
+        # return HttpResponse(expire_date)
+
         coupon.save()
         return redirect('coupons')
     return render(request,'edit_coupons.html',{"coupon":coupon})
