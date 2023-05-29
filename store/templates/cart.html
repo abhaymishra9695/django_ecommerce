@@ -60,8 +60,56 @@ cart
 					</div>
 					<div class="checkout-info">
 						<label class="checkbox-field">
-							<input class="frm-input " name="have-code" id="have-code" value="" type="checkbox"><span>I have promo code</span>
+							<input class="frm-input " name="have-code" id="myCheckbox" value="" type="checkbox"><span>I have promo code</span>
 						</label>
+						<div  id="myDiv"class="summary-item" style="display: none;" >
+							<form method="post">
+								{% csrf_token %}
+								<h4 class="title-box">Coupon Code</h4>
+								<p class="row-in-form">
+									<label for="coupon-code">Enter your coupon code:</label>
+									<input type="text" name="coupon">
+								</input>
+								<button type="submit" class="btn btn-small">Apply</button>
+								</p>
+
+							{% if cart.Coupon %}
+							<a href="{% url 'remove_coupon' cart.id %}" class="btn btn-success" style="background-color: green;">{{cart.Coupon.code}}</a>
+							{% endif %}
+						</form>
+						</div>
+				
+						<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+
+						<script>
+							 $(document).ready(function() {
+            var checkbox = $('#myCheckbox');
+            var myDiv = $('#myDiv');
+
+            // Retrieve checkbox state from localStorage if available
+            var checkboxState = localStorage.getItem('checkboxState');
+            if (checkboxState === 'checked') {
+                checkbox.prop('checked', true);
+                myDiv.show();
+                myDiv.removeClass('hidden');
+            }
+
+            checkbox.change(function() {
+                if ($(this).is(':checked')) {
+                    // Store checkbox state in localStorage
+                    localStorage.setItem('checkboxState', 'checked');
+                    myDiv.show();
+                    myDiv.removeClass('hidden');
+                } else {
+                    // Remove checkbox state from localStorage
+                    localStorage.removeItem('checkboxState');
+                    myDiv.hide();
+                    myDiv.addClass('hidden');
+                }
+            });
+        });
+
+						</script>
 						<a class="btn btn-checkout" href="checkout.html">Check out</a>
 						<a class="link-to-shop" href="{% url 'shop' %}">Continue Shopping<i class="fa fa-arrow-circle-right" aria-hidden="true"></i></a>
 					</div>

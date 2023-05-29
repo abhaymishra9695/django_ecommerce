@@ -30,6 +30,7 @@ Categories for Admin
                                 <th>Type</th>
                                 <th>Value</th>
                                 <th>Cart_Value</th>
+                                <th>expire_date</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -45,7 +46,8 @@ Categories for Admin
                                 {% else %}
                                 <td>{{ coupon.value }} %</td>
                                 {% endif %}
-                                <td>{{ coupon.cart_value }}</td>
+                                <td>{{ coupon.minimum_amount }}</td>
+                                <td>{{ coupon.expire_date }}</td>
                                 <td><a href="{% url 'edit_coupon' coupon.id  %}" class="btn btn-warning" >Edit</a>
                                     <a href="{% url 'delete_coupon' coupon.id  %}" onclick="confirm('Are you sure, You want to delete this ?')" class="btn btn-danger">delete</a></td>
 

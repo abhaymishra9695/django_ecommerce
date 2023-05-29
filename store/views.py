@@ -40,8 +40,24 @@ def home(request):
 def cart(request):   # sourcery skip: remove-unreachable-code
     cart=Cart.objects.filter(is_paid=False,user=request.user).first()
     cart_items = cart.cart_items.all()
-  
-    # return HttpResponse(total_price)
+    if request.method=="POST":
+        coupon = request.POST.get('coupon')
+        try:
+            coupon_obj = Coupons.objects.get(code=coupon)
+           
+        except Coupons.DoesNotExist:
+            # Invalid coupon, raise Http404 or handle the error accordingly
+            return HttpResponse("Invalid coupon")
+        if cart.Coupon:
+            return HttpResponse("coupon already exist")
+            #pahale se to nahi apply hai(coupon already exist )
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER')) 
+        if cart.get_cart_total()<coupon_obj.minimum_amount:
+            return HttpResponse(f'Amount should be greater than {coupon_obj.minimum_amount}')
+        cart.Coupon=coupon_obj
+        cart.save()
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER')) 
+
     return render(request,'cart.html',{"cart":cart,"cart_items":cart_items})
 def aboutus(request):
     return render(request,'aboutus.html') 
@@ -439,7 +455,7 @@ def add_coupon(request):
         type=request.POST.get('type')
         value=request.POST.get('value')
         cart_value=request.POST.get('cart_value')
-        coupons= Coupons.objects.create(code=code,type=type,value=value,cart_value=cart_value)
+        coupons= Coupons.objects.create(code=code,type=type,value=value,minimum_amount=cart_value)
         coupons.save()
         return redirect('coupons')
     return render(request,'add_coupons.html')
@@ -450,12 +466,21 @@ def edit_coupon(request,id):
         type=request.POST.get('type')
         value=request.POST.get('value')
         cart_value=request.POST.get('cart_value')
-        coupons= Coupons.objects.create(code=code,type=type,value=value,cart_value=cart_value)
-        coupons.save()
+        coupon.code=code
+        coupon.type=type
+        coupon.value=value
+        coupon.minimum_amount=cart_value
+        coupon.save()
         return redirect('coupons')
     return render(request,'edit_coupons.html',{"coupon":coupon})
 
 def delete_coupon(request,id):
     coupon=Coupons.objects.get(id=id)
     coupon.delete()
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER')) 
+
+def remove_coupon(request,id):
+    cart=Cart.objects.get(id=id)
+    cart.Coupon=None
+    cart.save()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER')) 

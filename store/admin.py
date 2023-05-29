@@ -36,4 +36,4 @@ class AdminSale(admin.ModelAdmin):
 
 @admin.register(Coupons)
 class AdminSale(admin.ModelAdmin):
-    list_display=['code','type','cart_value','value']
+    list_display=['code','type','minimum_amount','value']

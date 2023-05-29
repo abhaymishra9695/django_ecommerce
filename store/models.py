@@ -66,11 +66,22 @@ class Product(models.Model):
     def __str__(self):
         return self.name         
     
-        
+class Coupons(models.Model):
+    types=[
+    ("fixed", "fixed"),
+    ("percent", "percent"),
+    ]
+    code =models.CharField(max_length=100,unique=True)
+    type=models.CharField(max_length=100, choices=types)
+    value=models.IntegerField(default=0)
+    minimum_amount=models.IntegerField(default=0)
+    expire_date=models.DateTimeField(default=timezone.now)
+    date_joined = models.DateTimeField(default=timezone.now)      
+
 class Cart(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE,related_name="carts")
     is_paid = models.BooleanField(default=False)
-
+    Coupon=models.ForeignKey(Coupons,on_delete=models.SET_NULL, null=True,blank=True)
     def get_cart_total(self): 
         price=[]
         cart_items=self.cart_items.all()
@@ -81,6 +92,17 @@ class Cart(models.Model):
                 product_price=cart_item.product.regular_price*cart_item.quantity
 
             price.append(product_price)
+        if self.Coupon:
+            if self.Coupon.type=="fixed":
+                if self.Coupon.minimum_amount<sum(price):
+                    return sum(price)-self.Coupon.value
+                else:
+                    return sum(price)
+            if self.Coupon.type=="percent":
+                if self.Coupon.minimum_amount<sum(price):
+                    return sum(price)-(self.Coupon.value*sum(price))/100
+                else:
+                    return sum(price)
         return sum(price)
 
    
@@ -88,7 +110,7 @@ class CartItem(models.Model):
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE,related_name="cart_items")
     product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True, blank=True)
     quantity = models.PositiveIntegerField(default=1)
-    def get_product_price(self):
+    def get_product_price(self):    
         if self.product.sale_price > 0:
             product_price=self.product.sale_price*self.quantity  
         else:
@@ -127,13 +149,4 @@ class Wishlist(models.Model):
 
 
 
-class Coupons(models.Model):
-    types=[
-    ("fixed", "fixed"),
-    ("percent", "percent"),
-    ]
-    code =models.CharField(max_length=100)
-    type=models.CharField(max_length=100, choices=types)
-    value=models.DecimalField(decimal_places=0,max_digits=5)
-    cart_value=models.DecimalField(decimal_places=0,max_digits=7)
-    date_joined = models.DateTimeField(default=timezone.now)        
+       
