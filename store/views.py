@@ -38,14 +38,23 @@ def home(request):
     return render(request,'home.html',{"sliders":slider,"products":products,"catageries":catageries,"sprodects":sprodects,"sale":sale})
 
 
-def cart(request):   # sourcery skip: remove-unreachable-code
-    cart=Cart.objects.filter(is_paid=False,user=request.user).first()
-    cart_items = cart.cart_items.all()
+def cart(request):
+    if request.user.is_authenticated:
+        cart=Cart.objects.filter(is_paid=False,user=request.user).first()
+        # return HttpResponse(cart)
+        if cart is None:
+            return render(request,'cart.html')
+        cart_items = cart.cart_items.all()
+    else:
+        cart=Cart.objects.filter(is_paid=False,session_key=request.session.session_key).first()
+        if cart is None:
+            return render(request,'cart.html')
+        cart_items = cart.cart_items.all()
+
     if request.method=="POST":
         coupon = request.POST.get('coupon')
         try:
             coupon_obj = Coupons.objects.get(code=coupon)
-            # return HttpResponse(coupon_obj.expire_date.date())
         except Coupons.DoesNotExist:
             # Invalid coupon, raise Http404 or handle the error accordingly
             return HttpResponse("Invalid coupon")
@@ -57,7 +66,7 @@ def cart(request):   # sourcery skip: remove-unreachable-code
 
 
             #pahale se to nahi apply hai(coupon already exist )
-            return HttpResponseRedirect(request.META.get('HTTP_REFERER')) 
+            # return HttpResponseRedirect(request.META.get('HTTP_REFERER')) 
     
 
         if cart.get_cart_total()<coupon_obj.minimum_amount:
@@ -114,7 +123,7 @@ def shop(request):  # sourcery skip: merge-comparisons, merge-duplicate-blocks, 
 def contectus(request):
     return render(request,'contectus.html')
    
-
+@login_required(login_url="singin")
 def checkout(request):
     return render(request,'checkout.html')
 
@@ -138,6 +147,22 @@ def singin(request):
         password=request.POST.get('password')
         user=authenticate(request,email=email,password=password)
         if user is not None:
+            user_cart, _ = Cart.objects.get_or_create(user=user, is_paid=False)
+           
+            # user_cart_item = CartItem.objects.create(cart=user_cart, product=product)
+            session_key = request.session.session_key
+            if session_key:
+                session_cart = Cart.objects.filter(session_key=session_key, is_paid=False).first()
+                is_cart_item_exists=CartItem.objects.filter(cart=session_cart).exists()
+                print(is_cart_item_exists)
+                if is_cart_item_exists:
+                    cart_item = CartItem.objects.filter(cart=session_cart)
+                    # return HttpResponse(cart_item)
+                    for item in cart_item:
+                        print(item.cart.user)
+                        item.cart = user_cart
+                        item.save()
+                        session_cart.delete()
             login(request,user)
             return redirect('dashboard')
     return render(request,'singin.html')
@@ -159,14 +184,48 @@ def product_detail(request, slug):
     sale=Sale.objects.get(id=1)
     return render(request,'detail.html',{'product':product,'popular_products':popular_products,'related_products':related_products,'sale':sale,})
 
+from django.shortcuts import get_object_or_404
 
-def add_cart_product(request,slug):
+def add_cart_product(request, slug):
     product=Product.objects.get(slug=slug)
-    user=request.user
-    cart,_=Cart.objects.get_or_create(user=user,is_paid=False)
-    cartitem=CartItem.objects.create(cart=cart,product=product) 
-    cartitem.save()
+    # return HttpResponse(product)
+    user = request.user
+
+    if user.is_authenticated:
+        cart, _ = Cart.objects.get_or_create(user=user, is_paid=False)
+        cart_item = CartItem.objects.filter(cart=cart, product=product).first()
+        if cart_item:
+            cart_item.quantity=cart_item.quantity+1
+            cart_item.save()
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+        cart_item = CartItem.objects.create(cart=cart, product=product)
+        cart_item.save()
+    else:
+        session_key = request.session.session_key
+        if not session_key:
+            request.session.create()
+            session_key = request.session.session_key
+
+        cart, _ = Cart.objects.get_or_create(session_key=session_key, is_paid=False)
+        cart_item = CartItem.objects.filter(cart=cart, product=product).first()
+        # return HttpResponse(cart_item.quantity)
+        if cart_item:
+            cart_item.quantity=cart_item.quantity+1
+            cart_item.save()
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+        cart_item = CartItem.objects.create(cart=cart, product=product)
+        cart_item.save()
+
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+
+# def add_cart_product(request,slug):
+#     product=Product.objects.get(slug=slug)
+#     user=request.user
+#     cart,_=Cart.objects.get_or_create(user=user,is_paid=False)
+#     cartitem=CartItem.objects.create(cart=cart,product=product) 
+#     cartitem.save()
+    # return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 def remove_cart_product(request,cart_item_id): 
     # return HttpResponse(cart_item_id)

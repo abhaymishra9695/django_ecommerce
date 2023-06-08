@@ -4,6 +4,7 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.http import HttpResponse, HttpResponseRedirect
 
+
 from .managers import CustomUserManager
 
 
@@ -21,8 +22,15 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     objects = CustomUserManager()
 
-    def get_cart_count(self):
-        return CartItem.objects.filter(cart__is_paid=False, cart__user=self).count()
+    # def get_cart_count(self):
+     #   if self.user:
+      #      return CartItem.objects.filter(cart__is_paid=False, cart__user=self).count()
+       # else:
+     #       session_key = session.session_key
+      #      return CartItem.objects.filter(cart__is_paid=False, cart__session_key=session_key).count()
+    
+
+
     def get_wish_count(self):
         return Wishlist.objects.filter(user=self).count()
 
@@ -79,9 +87,16 @@ class Coupons(models.Model):
     date_joined = models.DateTimeField(default=timezone.now)      
 
 class Cart(models.Model):
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE,related_name="carts")
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE,related_name="carts" ,null=True, blank=True)
+    session_key = models.CharField(max_length=40, null=True, blank=True)
     is_paid = models.BooleanField(default=False)
     Coupon=models.ForeignKey(Coupons,on_delete=models.SET_NULL, null=True,blank=True)
+    
+    def get_cart_count(self):
+        if self.user.is_authenticated:
+            return CartItem.objects.filter(cart__is_paid=False, cart__user=self.user).count()
+        else:
+            return CartItem.objects.filter(cart__is_paid=False, cart__session_key=self.session_key).count()
     def get_cart_total(self): 
         price=[]
         cart_items=self.cart_items.all()

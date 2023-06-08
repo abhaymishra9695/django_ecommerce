@@ -15,7 +15,9 @@ cart
 				</ul>
 			</div>
 			<div class=" main-content-area">
-
+				{% if request.user.is_authenticated %}
+   
+    			{% if request.user.carts.first.get_cart_count > 0 %}
 				<div class="wrap-iten-in-cart">
 					<h3 class="box-title">Products Name</h3>
 					<ul class="products-cart">
@@ -110,7 +112,7 @@ cart
         });
 
 						</script>
-						<a class="btn btn-checkout" href="checkout.html">Check out</a>
+						<a class="btn btn-checkout" href="{% url 'checkout' %}">Check out</a>
 						<a class="link-to-shop" href="{% url 'shop' %}">Continue Shopping<i class="fa fa-arrow-circle-right" aria-hidden="true"></i></a>
 					</div>
 					<div class="update-clear">
@@ -118,7 +120,127 @@ cart
 						<a class="btn btn-update" href="#">Update Shopping Cart</a>
 					</div>
 				</div>
+				{% else %}
+				<div class="text-center" style="padding: 30px 0;">
+					<h1>Your cart is empty!</h1>
+					<p>Add items to it now</p>
+					<a href="{% url 'shop' %}" class="btn btn-success">Show Now</a>
+					
+				</div>
+				{% endif %}
+				{% else %}
+				{% if request.session.session_key.first.get_cart_count > 0 %}
+				<div class="wrap-iten-in-cart">
+					<h3 class="box-title">Products Name</h3>
+					<ul class="products-cart">
+						{% for cart_item in cart_items %}
+						
+						<li class="pr-cart-item">
+							<div class="product-image">
+								<figure><img src="/media/{{cart_item.product.imagesname}}" alt=""></figure>
+							</div>
+							<div class="product-name">
+								<a class="link-to-product" href="#">{{cart_item.product.name}}</a>
+							</div>
+							<div class="price-field produtc-price"><p class="price">&#8377;{{cart_item.product.regular_price}}</p></div>
+							<div class="quantity">
+								<div class="quantity-input">
+									<input type="text" name="product-quatity" value="{{cart_item.quantity}}" data-max="120" pattern="[0-9]*" >									
 
+									<a class="" href="{% url 'increment_cart' cart_item.id %}"><i class="bi bi-plus-circle-fill" style="font-size: 24px;" ></i></a>
+									<a href="{% url 'decrement_cart' cart_item.id %}"><i class="bi bi-dash-circle-fill" style="font-size: 24px;"></i></a>
+
+								</div>
+							</div>
+
+							<div class="price-field sub-total"><p class="price">&#8377;{{cart_item.get_product_price}}</p></div>
+							<div class="delete">
+								<a href="{% url 'remove_cart_product' cart_item.id %}"  title="{{cart_item.product.name}}">
+									<!-- <span>Delete from your cart</span> -->
+									<i class="fa fa-times-circle" aria-hidden="true" style="font-size: 24px;"></i>
+								</a>
+							</div>
+						</li>
+						{% endfor %}
+					</ul>
+				</div>
+
+				<div class="summary">
+					<div class="order-summary">
+						<h4 class="title-box">Order Summary</h4>
+						<p class="summary-info"><span class="title">Subtotal</span><b class="index">&#8377;{{ cart.get_cart_total }}</b></p>
+						<p class="summary-info"><span class="title">Shipping</span><b class="index">Free Shipping</b></p>
+						<p class="summary-info total-info "><span class="title">Total</span><b class="index">&#8377;{{ cart.get_cart_total }}</b></p>
+					</div>
+					<div class="checkout-info">
+						<label class="checkbox-field">
+							<input class="frm-input " name="have-code" id="myCheckbox" value="" type="checkbox"><span>I have promo code</span>
+						</label>
+						<div  id="myDiv"class="summary-item" style="display: none;" >
+							<form method="post">
+								{% csrf_token %}
+								<h4 class="title-box">Coupon Code</h4>
+								<p class="row-in-form">
+									<label for="coupon-code">Enter your coupon code:</label>
+									<input type="text" name="coupon">
+								</input>
+								<button type="submit" class="btn btn-small">Apply</button>
+								</p>
+
+							{% if cart.Coupon %}
+							<a href="{% url 'remove_coupon' cart.id %}" class="btn btn-success" style="background-color: green;">{{cart.Coupon.code}}</a>
+							{% endif %}
+						</form>
+						</div>
+				
+						<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+
+						<script>
+							 $(document).ready(function() {
+            var checkbox = $('#myCheckbox');
+            var myDiv = $('#myDiv');
+
+            // Retrieve checkbox state from localStorage if available
+            var checkboxState = localStorage.getItem('checkboxState');
+            if (checkboxState === 'checked') {
+                checkbox.prop('checked', true);
+                myDiv.show();
+                myDiv.removeClass('hidden');
+            }
+
+            checkbox.change(function() {
+                if ($(this).is(':checked')) {
+                    // Store checkbox state in localStorage
+                    localStorage.setItem('checkboxState', 'checked');
+                    myDiv.show();
+                    myDiv.removeClass('hidden');
+                } else {
+                    // Remove checkbox state from localStorage
+                    localStorage.removeItem('checkboxState');
+                    myDiv.hide();
+                    myDiv.addClass('hidden');
+                }
+            });
+        });
+
+						</script>
+						<a class="btn btn-checkout" href="{% url 'checkout' %}">Check out</a>
+						<a class="link-to-shop" href="{% url 'shop' %}">Continue Shopping<i class="fa fa-arrow-circle-right" aria-hidden="true"></i></a>
+					</div>
+					<div class="update-clear">
+						<a class="btn btn-clear" href="{% url 'delete_cart' %}">Clear Shopping Cart</a>
+						<a class="btn btn-update" href="#">Update Shopping Cart</a>
+					</div>
+				</div>
+				{% else %}
+				<div class="text-center" style="padding: 30px 0;">
+					<h1>Your cart is empty!</h1>
+					<p>Add items to it now</p>
+					<a href="{% url 'shop' %}" class="btn btn-success">Show Now</a>
+					
+				</div>
+				{% endif %}
+				{% endif %}
 				<div class="wrap-show-advance-info-box style-1 box-in-site">
 					<h3 class="title-box">Most Viewed Products</h3>
 					<div class="wrap-products">
